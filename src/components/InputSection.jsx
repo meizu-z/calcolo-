@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import FDTEditor from './src/components/FDTEditor';
+import FDTEditor from './FDTEditor.jsx';
 
 /**
  * InputSection - Handles both raw data and FDT input modes

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { calculateRawStats, calculateGroupedStats } from '../statistics';
-import FulcrumBalance from './visualizations/FulcrumBalance';
-import GlowEffect from './visualizations/GlowEffect';
-import SortingRow from './visualizations/SortingRow';
-import ModeDisplay from './visualizations/ModeDisplay';
+import { calculateRawStats, calculateGroupedStats } from '../statistics.js';
+import FulcrumBalance from './visualizations/FulcrumBalance.jsx';
+import GlowEffect from './visualizations/GlowEffect.jsx';
+import SortingRow from './visualizations/SortingRow.jsx';
+import ModeDisplay from './visualizations/ModeDisplay.jsx';
 
 /**
  * ResultsGrid - Displays all four statistics with their visualizations

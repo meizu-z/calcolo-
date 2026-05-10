@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import InputSection from '../InputSection';
-import ResultsGrid from './components/ResultsGrid';
+import InputSection from './components/InputSection.jsx';
+import ResultsGrid from './components/ResultsGrid.jsx';
 
 /**
  * BentoCalculator - Main Container Component

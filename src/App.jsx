@@ -1,5 +1,5 @@
 import React from 'react';
-import BentoCalculator from './components/BentoCalculator';
+import BentoCalculator from './BentoCalculator.jsx';
 import './globals.css';
 
 /**
