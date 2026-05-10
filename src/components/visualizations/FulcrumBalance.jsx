@@ -11,11 +11,11 @@ export default function FulcrumBalance({ value, min, max }) {
   const position = ((value - min) / range) * 100;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       {/* Balance Beam Visualization */}
-      <div className="relative h-32 bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl p-6 flex items-center justify-center overflow-hidden border border-white/10">
+      <div className="relative h-24 bg-black/20 rounded-xl p-4 flex items-center justify-center overflow-hidden">
         {/* Beam Line */}
-        <div className="absolute w-full h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 top-1/2 transform -translate-y-1/2"></div>
+        <div className="absolute w-full h-2 bg-black/50 top-1/2 transform -translate-y-1/2 rounded-full"></div>
 
         {/* Fulcrum (Animated Pivot) */}
         <div
@@ -24,25 +24,25 @@ export default function FulcrumBalance({ value, min, max }) {
         >
           {/* Triangle Pivot Point */}
           <div className="relative">
-            <div className="w-0 h-0 border-l-4 border-r-4 border-t-8 border-l-transparent border-r-transparent border-t-blue-400 mx-auto"></div>
+            <div className="w-0 h-0 border-l-6 border-r-6 border-t-12 border-l-transparent border-r-transparent border-t-black mx-auto"></div>
             {/* Glow Effect Around Fulcrum */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-blue-400/30 rounded-full blur-lg animate-pulse-subtle"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-black/20 rounded-full blur-lg animate-pulse-subtle"></div>
           </div>
         </div>
 
         {/* Min/Max Labels */}
-        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 pl-3 text-slate-500 text-xs">
+        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 pl-3 text-black/60 text-xs font-['Urbanist']">
           {min.toFixed(1)}
         </div>
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 pr-3 text-slate-500 text-xs">
+        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 pr-3 text-black/60 text-xs font-['Urbanist']">
           {max.toFixed(1)}
         </div>
       </div>
 
       {/* Position Information */}
       <div className="text-center">
-        <p className="text-slate-400 text-sm">
-          Balance Point: <span className="text-blue-300 font-semibold">{position.toFixed(1)}%</span>
+        <p className="text-black/70 text-sm font-['Urbanist']">
+          Balance Point: <span className="text-black font-semibold">{position.toFixed(1)}%</span>
         </p>
       </div>
     </div>

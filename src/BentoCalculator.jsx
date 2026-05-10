@@ -6,7 +6,7 @@ import ResultsGrid from './components/ResultsGrid.jsx';
 
 /**
  * BentoCalculator - Main Container Component
- * Manages state for raw data and frequency distribution table modes
+ * Landscape-oriented dashboard for Calcolo Statistics
  */
 export default function BentoCalculator() {
   const [mode, setMode] = useState('raw'); // 'raw' or 'grouped'
@@ -19,56 +19,54 @@ export default function BentoCalculator() {
     (mode === 'grouped' && intervals.length > 0 && frequencies.length > 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
-            Bento Statistics
-          </h1>
-          <p className="text-slate-400 text-base md:text-lg">
-            Descriptive Statistics with Physical Visualizations
-          </p>
+    <div className="w-full">
+      {/* Header Section */}
+      <div className="mb-8">
+        <h1 className="text-5xl font-bold text-white mb-2 tracking-tight font-['Urbanist']">
+          Calcolo Statistics
+        </h1>
+        <p className="text-slate-300 text-lg font-['Urbanist']">
+          Descriptive Statistics Dashboard
+        </p>
+      </div>
+
+      {/* Landscape Grid Layout */}
+      <div className="flex gap-8 w-full">
+        {/* Input Section - Far Left */}
+        <div className="w-1/4 flex-shrink-0">
+          <InputSection
+            mode={mode}
+            setMode={setMode}
+            rawData={rawData}
+            setRawData={setRawData}
+            intervals={intervals}
+            setIntervals={setIntervals}
+            frequencies={frequencies}
+            setFrequencies={setFrequencies}
+          />
         </div>
 
-        {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Input Section - Left Column */}
-          <div className="lg:col-span-1">
-            <InputSection
+        {/* Results Section - Right (2x2 or 3x2 grid) */}
+        <div className="flex-1">
+          {isDataValid ? (
+            <ResultsGrid
               mode={mode}
-              setMode={setMode}
               rawData={rawData}
-              setRawData={setRawData}
               intervals={intervals}
-              setIntervals={setIntervals}
               frequencies={frequencies}
-              setFrequencies={setFrequencies}
             />
-          </div>
-
-          {/* Results Section - Right Columns */}
-          <div className="lg:col-span-2">
-            {isDataValid ? (
-              <ResultsGrid
-                mode={mode}
-                rawData={rawData}
-                intervals={intervals}
-                frequencies={frequencies}
-              />
-            ) : (
-              <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-12 text-center h-full flex items-center justify-center min-h-96">
-                <div>
-                  <p className="text-slate-400 text-lg mb-2">
-                    Enter data to see statistics visualizations
-                  </p>
-                  <p className="text-slate-500 text-sm">
-                    Choose {'"'}Raw Data{'"'} for comma-separated values or {'"'}Frequency Table{'"'} for grouped data
-                  </p>
-                </div>
+          ) : (
+            <div className="bg-[#D8DFE9] rounded-2xl p-12 text-center h-full flex items-center justify-center min-h-96">
+              <div>
+                <p className="text-black text-lg font-semibold mb-2 font-['Urbanist']">
+                  Enter data to see statistics
+                </p>
+                <p className="text-black/70 text-sm font-['Urbanist']">
+                  Choose "Raw Data" for comma-separated values or "Frequency Table" for grouped data
+                </p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

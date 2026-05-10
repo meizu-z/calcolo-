@@ -9,6 +9,7 @@ import ModeDisplay from './visualizations/ModeDisplay.jsx';
 
 /**
  * ResultsGrid - Displays all four statistics with their visualizations
+ * 2x2 landscape grid layout
  */
 export default function ResultsGrid({ mode, rawData, intervals, frequencies }) {
   const stats = useMemo(() => {
@@ -29,53 +30,61 @@ export default function ResultsGrid({ mode, rawData, intervals, frequencies }) {
       : Math.max(...intervals.map((i) => i[1]));
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Mean: Fulcrum Balance */}
-      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
+    <div className="grid grid-cols-2 gap-6 h-full">
+      {/* Mean: Fulcrum Balance - Alice Blue */}
+      <div className="tile-alice rounded-2xl p-8 flex flex-col">
         <div className="mb-6">
-          <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider">
+          <p className="text-black text-sm font-semibold uppercase tracking-wider font-['Urbanist']">
             Mean (Average)
           </p>
-          <p className="text-4xl font-bold text-blue-300 mt-2">{stats.mean}</p>
+          <p className="text-4xl font-bold text-black mt-2 font-['Urbanist']">{stats.mean.toFixed(2)}</p>
         </div>
-        <FulcrumBalance value={stats.mean} min={minValue} max={maxValue} />
+        <div className="flex-1 flex items-center justify-center">
+          <FulcrumBalance value={stats.mean} min={minValue} max={maxValue} />
+        </div>
       </div>
 
-      {/* Standard Deviation: Glow Effect */}
-      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
+      {/* Mode: Frequency Display - Alice Blue */}
+      <div className="tile-alice rounded-2xl p-8 flex flex-col">
         <div className="mb-6">
-          <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider">
-            Standard Deviation
-          </p>
-          <p className="text-4xl font-bold text-amber-300 mt-2">{stats.sd}</p>
-        </div>
-        <GlowEffect value={stats.sd} />
-      </div>
-
-      {/* Median: Sorting Row */}
-      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
-        <div className="mb-6">
-          <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider">
-            Median (Middle Value)
-          </p>
-          <p className="text-4xl font-bold text-emerald-300 mt-2">
-            {stats.median}
-          </p>
-        </div>
-        <SortingRow value={stats.median} sorted={stats.sorted || []} />
-      </div>
-
-      {/* Mode: Frequency Display */}
-      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
-        <div className="mb-6">
-          <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider">
+          <p className="text-black text-sm font-semibold uppercase tracking-wider font-['Urbanist']">
             Mode (Most Frequent)
           </p>
-          <p className="text-4xl font-bold text-pink-300 mt-2">
+          <p className="text-4xl font-bold text-black mt-2 font-['Urbanist']">
             {stats.mode !== null ? stats.mode : 'N/A'}
           </p>
         </div>
-        <ModeDisplay value={stats.mode} frequency={stats.frequency} mode={mode} />
+        <div className="flex-1 flex items-center justify-center">
+          <ModeDisplay value={stats.mode} frequency={stats.frequency} mode={mode} />
+        </div>
+      </div>
+
+      {/* Median: Sorting Row - Vanilla Yellow */}
+      <div className="tile-vanilla rounded-2xl p-8 flex flex-col">
+        <div className="mb-6">
+          <p className="text-black text-sm font-semibold uppercase tracking-wider font-['Urbanist']">
+            Median (Middle Value)
+          </p>
+          <p className="text-4xl font-bold text-black mt-2 font-['Urbanist']">
+            {stats.median.toFixed(2)}
+          </p>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <SortingRow value={stats.median} sorted={stats.sorted || []} />
+        </div>
+      </div>
+
+      {/* Standard Deviation: Glow Effect - Vanilla Yellow */}
+      <div className="tile-vanilla rounded-2xl p-8 flex flex-col">
+        <div className="mb-6">
+          <p className="text-black text-sm font-semibold uppercase tracking-wider font-['Urbanist']">
+            Standard Deviation
+          </p>
+          <p className="text-4xl font-bold text-black mt-2 font-['Urbanist']">{stats.sd.toFixed(2)}</p>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <GlowEffect value={stats.sd} />
+        </div>
       </div>
     </div>
   );

@@ -1,19 +1,25 @@
 /**
- * Global CSS for Bento Statistics Calculator
+ * Global CSS for Calcolo Statistics Calculator
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap');
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
 @layer base {
+  html, body {
+    @apply font-['Urbanist'];
+    font-family: 'Urbanist', sans-serif;
+  }
+
   body {
-    @apply bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen;
+    @apply bg-black min-h-screen;
   }
 
   input,
   textarea {
-    @apply transition-all duration-200;
+    @apply transition-all duration-200 font-['Urbanist'];
   }
 
   input:focus,
@@ -23,16 +29,28 @@
 }
 
 @layer components {
-  .glass-panel {
-    @apply backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl;
-  }
-
   .stat-label {
-    @apply text-slate-400 text-sm font-semibold uppercase tracking-wider;
+    @apply text-sm font-semibold uppercase tracking-wider;
   }
 
   .stat-value {
     @apply font-bold text-4xl;
+  }
+
+  .tile-honeydew {
+    @apply bg-[#CFDECA] text-black;
+  }
+
+  .tile-vanilla {
+    @apply bg-[#EFF0A3] text-black;
+  }
+
+  .tile-alice {
+    @apply bg-[#D8DFE9] text-black;
+  }
+
+  .btn-active {
+    @apply bg-[#EFF0A3] text-black font-semibold;
   }
 }
 

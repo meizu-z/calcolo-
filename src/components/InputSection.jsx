@@ -31,29 +31,29 @@ export default function InputSection({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full flex flex-col">
       {/* Mode Toggle Buttons */}
-      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-6">
-        <p className="text-slate-300 text-sm font-semibold mb-4 uppercase tracking-wider">
+      <div className="tile-honeydew rounded-2xl p-6">
+        <p className="text-black text-sm font-semibold mb-4 uppercase tracking-wider font-['Urbanist']">
           Input Mode
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-3">
           <button
             onClick={() => setMode('raw')}
-            className={`flex-1 px-4 py-3 rounded-2xl font-medium transition-all duration-200 ${
+            className={`px-4 py-3 rounded-xl font-semibold transition-all duration-200 font-['Urbanist'] ${
               mode === 'raw'
-                ? 'bg-blue-500/40 border border-blue-400/60 text-blue-100'
-                : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10'
+                ? 'btn-active'
+                : 'bg-black/20 text-black hover:bg-black/30'
             }`}
           >
             Raw Data
           </button>
           <button
             onClick={() => setMode('grouped')}
-            className={`flex-1 px-4 py-3 rounded-2xl font-medium transition-all duration-200 ${
+            className={`px-4 py-3 rounded-xl font-semibold transition-all duration-200 font-['Urbanist'] ${
               mode === 'grouped'
-                ? 'bg-purple-500/40 border border-purple-400/60 text-purple-100'
-                : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10'
+                ? 'btn-active'
+                : 'bg-black/20 text-black hover:bg-black/30'
             }`}
           >
             Frequency Table
@@ -63,18 +63,18 @@ export default function InputSection({
 
       {/* Raw Data Input */}
       {mode === 'raw' && (
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-6">
-          <label className="block text-slate-300 text-sm font-semibold mb-3 uppercase tracking-wider">
+        <div className="tile-honeydew rounded-2xl p-6 flex-1 flex flex-col">
+          <label className="block text-black text-sm font-semibold mb-3 uppercase tracking-wider font-['Urbanist']">
             Enter Data Points
           </label>
           <textarea
             value={rawData.join(', ')}
             onChange={handleRawDataChange}
             placeholder="e.g., 12, 15, 18, 22, 25"
-            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-slate-500 focus:outline-none focus:border-blue-400/60 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none"
+            className="w-full bg-white/20 rounded-xl p-4 text-black placeholder-black/50 focus:outline-none focus:ring-2 focus:ring-black/40 transition-all resize-none flex-1 font-['Urbanist']"
             rows="6"
           />
-          <p className="text-slate-400 text-xs mt-3">
+          <p className="text-black/70 text-xs mt-3 font-['Urbanist']">
             Comma-separated values. {rawData.length} values detected.
           </p>
         </div>
@@ -92,11 +92,11 @@ export default function InputSection({
 
       {/* Data Summary */}
       {(rawData.length > 0 || frequencies.length > 0) && (
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-6">
-          <p className="text-slate-300 text-sm font-semibold mb-2 uppercase tracking-wider">
+        <div className="tile-honeydew rounded-2xl p-6">
+          <p className="text-black text-sm font-semibold mb-2 uppercase tracking-wider font-['Urbanist']">
             Summary
           </p>
-          <p className="text-slate-400">
+          <p className="text-black/80 font-['Urbanist']">
             {mode === 'raw'
               ? `Data points: ${rawData.length}`
               : `Total frequency: ${frequencies.reduce((a, b) => a + b, 0)}`}
