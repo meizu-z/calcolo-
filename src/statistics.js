@@ -79,16 +79,54 @@ export const calculateGroupedStats = (intervals, frequencies) => {
     };
   }
 
-  const n = frequencies.reduce((a, b) => a + b, 0);
+  // Convert string inputs to numbers and validate
+  const numericFrequencies = frequencies
+    .map((f) => {
+      const num = typeof f === 'string' ? parseFloat(f) : f;
+      return isNaN(num) ? 0 : num;
+    })
+    .filter((f) => f > 0); // Only include rows with frequency > 0
+
+  // Convert interval strings to numbers and validate
+  const numericIntervals = intervals
+    .map((interval) => {
+      const [lower, upper] = interval;
+      const l = typeof lower === 'string' ? parseFloat(lower) : lower;
+      const u = typeof upper === 'string' ? parseFloat(upper) : upper;
+      return [isNaN(l) ? 0 : l, isNaN(u) ? 0 : u];
+    })
+    .filter((interval, idx) => {
+      // Only include intervals with corresponding frequencies > 0
+      const freqValue = frequencies[idx];
+      const freq = typeof freqValue === 'string' ? parseFloat(freqValue) : freqValue;
+      return !isNaN(freq) && freq > 0;
+    });
+
+  // Return empty if no valid data
+  if (numericFrequencies.length === 0 || numericIntervals.length === 0) {
+    return {
+      mean: 0,
+      median: 0,
+      mode: null,
+      sd: 0,
+      classMarks: [],
+      fx: [],
+      cf: [],
+      deviationSq: [],
+      fDeviationSq: [],
+    };
+  }
+
+  const n = numericFrequencies.reduce((a, b) => a + b, 0);
 
   // Class Marks: Midpoint of each interval
-  const classMarks = intervals.map((interval) => {
+  const classMarks = numericIntervals.map((interval) => {
     const [lower, upper] = interval;
     return (lower + upper) / 2;
   });
 
   // f*x: Frequency × Class Mark
-  const fx = classMarks.map((mark, i) => mark * frequencies[i]);
+  const fx = classMarks.map((mark, i) => mark * numericFrequencies[i]);
 
   // Mean: Sum of (f*x) divided by total frequency
   const mean = fx.reduce((a, b) => a + b, 0) / n;
@@ -96,29 +134,29 @@ export const calculateGroupedStats = (intervals, frequencies) => {
   // Cumulative Frequency: Running total of frequencies
   const cf = [];
   let cumSum = 0;
-  frequencies.forEach((freq) => {
+  numericFrequencies.forEach((freq) => {
     cumSum += freq;
     cf.push(cumSum);
   });
 
   // Median: Using interpolation formula for grouped data
   const medianClass = cf.findIndex((cumFreq) => cumFreq >= n / 2);
-  const medianInterval = intervals[medianClass];
+  const medianInterval = numericIntervals[medianClass];
   const [lowerMedian, upperMedian] = medianInterval;
   const classWidth = upperMedian - lowerMedian;
   const cfBefore = medianClass > 0 ? cf[medianClass - 1] : 0;
-  const freqMedianClass = frequencies[medianClass];
+  const freqMedianClass = numericFrequencies[medianClass];
   const median =
     lowerMedian +
     ((n / 2 - cfBefore) / freqMedianClass) * classWidth;
 
   // Mode: Class mark of highest frequency
-  const maxFreqIdx = frequencies.indexOf(Math.max(...frequencies));
+  const maxFreqIdx = numericFrequencies.indexOf(Math.max(...numericFrequencies));
   const modeClassMark = classMarks[maxFreqIdx];
 
   // Standard Deviation: Measure of spread in grouped data
   const deviationSq = classMarks.map((mark) => Math.pow(mark - mean, 2));
-  const fDeviationSq = deviationSq.map((dev, i) => dev * frequencies[i]);
+  const fDeviationSq = deviationSq.map((dev, i) => dev * numericFrequencies[i]);
   const variance = fDeviationSq.reduce((a, b) => a + b, 0) / n;
   const sd = Math.sqrt(variance);
 

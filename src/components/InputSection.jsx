@@ -5,6 +5,7 @@ import FDTEditor from './FDTEditor.jsx';
 
 /**
  * InputSection - Handles both raw data and FDT input modes
+ * Fixed: Consistent container height, fixed textarea height, and aligned summary tile
  */
 export default function InputSection({
   mode,
@@ -63,7 +64,7 @@ export default function InputSection({
 
       {/* Raw Data Input */}
       {mode === 'raw' && (
-        <div className="tile-honeydew rounded-2xl p-6 flex-1 flex flex-col">
+        <div className="tile-honeydew rounded-2xl p-6 flex flex-col min-h-80">
           <label className="block text-black text-sm font-semibold mb-3 uppercase tracking-wider font-['Urbanist']">
             Enter Data Points
           </label>
@@ -71,8 +72,7 @@ export default function InputSection({
             value={rawData.join(', ')}
             onChange={handleRawDataChange}
             placeholder="e.g., 12, 15, 18, 22, 25"
-            className="w-full bg-white/20 rounded-xl p-4 text-black placeholder-black/50 focus:outline-none focus:ring-2 focus:ring-black/40 transition-all resize-none flex-1 font-['Urbanist']"
-            rows="6"
+            className="w-full h-40 bg-black/15 rounded-xl p-4 text-black placeholder-black/50 focus:outline-none focus:ring-2 focus:ring-black/40 transition-all resize-none overflow-y-auto font-['Urbanist']"
           />
           <p className="text-black/70 text-xs mt-3 font-['Urbanist']">
             Comma-separated values. {rawData.length} values detected.
@@ -82,24 +82,26 @@ export default function InputSection({
 
       {/* FDT Input */}
       {mode === 'grouped' && (
-        <FDTEditor
-          intervals={intervals}
-          frequencies={frequencies}
-          setIntervals={setIntervals}
-          setFrequencies={setFrequencies}
-        />
+        <div className="flex-1 flex flex-col">
+          <FDTEditor
+            intervals={intervals}
+            frequencies={frequencies}
+            setIntervals={setIntervals}
+            setFrequencies={setFrequencies}
+          />
+        </div>
       )}
 
       {/* Data Summary */}
       {(rawData.length > 0 || frequencies.length > 0) && (
-        <div className="tile-honeydew rounded-2xl p-6">
+        <div className="tile-honeydew rounded-2xl p-6 mt-auto">
           <p className="text-black text-sm font-semibold mb-2 uppercase tracking-wider font-['Urbanist']">
             Summary
           </p>
           <p className="text-black/80 font-['Urbanist']">
             {mode === 'raw'
               ? `Data points: ${rawData.length}`
-              : `Total frequency: ${frequencies.reduce((a, b) => a + b, 0)}`}
+              : `Total frequency: ${frequencies.reduce((a, b) => a + (Number(b) || 0), 0)}`}
           </p>
         </div>
       )}
