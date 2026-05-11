@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * FDTEditor - Frequency Distribution Table Editor
  * Allows input and editing of class intervals and frequencies
- * Fixed: Empty initial state, text selection on focus, proper number conversion
+ * Enhanced: Paste from Clipboard feature with format validation
  */
 export default function FDTEditor({
   intervals,
@@ -13,6 +13,8 @@ export default function FDTEditor({
   setIntervals,
   setFrequencies,
 }) {
+  const [toast, setToast] = useState(null);
+
   const handleAddRow = () => {
     setIntervals([...intervals, ['', '']]);
     setFrequencies([...frequencies, '']);
@@ -39,19 +41,112 @@ export default function FDTEditor({
     e.target.select();
   };
 
+  const showToast = (message, type = 'error') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const handlePasteFromClipboard = async () => {
+    try {
+      const clipboardText = await navigator.clipboard.readText();
+      parseAndLoadClipboardData(clipboardText);
+    } catch (error) {
+      showToast('Unable to access clipboard. Please paste manually.', 'error');
+    }
+  };
+
+  const parseAndLoadClipboardData = (data) => {
+    // Expected format: "From,To,Freq|From,To,Freq|..."
+    // Example: "10,20,5|20,30,8|30,40,12"
+    
+    if (!data || data.trim().length === 0) {
+      showToast('Clipboard is empty. Please copy data first.', 'error');
+      return;
+    }
+
+    try {
+      const rows = data.trim().split('|').map((row) => row.trim());
+      const newIntervals = [];
+      const newFrequencies = [];
+
+      for (const row of rows) {
+        const parts = row.split(',').map((part) => part.trim());
+
+        if (parts.length !== 3) {
+          showToast(
+            'Invalid format. Expected: From,To,Freq|From,To,Freq',
+            'error'
+          );
+          return;
+        }
+
+        const lower = parseFloat(parts[0]);
+        const upper = parseFloat(parts[1]);
+        const freq = parseFloat(parts[2]);
+
+        if (isNaN(lower) || isNaN(upper) || isNaN(freq)) {
+          showToast('Invalid format. All values must be numbers.', 'error');
+          return;
+        }
+
+        if (lower >= upper) {
+          showToast('Invalid format. "From" must be less than "To".', 'error');
+          return;
+        }
+
+        newIntervals.push([lower.toString(), upper.toString()]);
+        newFrequencies.push(freq.toString());
+      }
+
+      setIntervals(newIntervals);
+      setFrequencies(newFrequencies);
+      showToast(
+        `Successfully loaded ${newIntervals.length} rows from clipboard`,
+        'success'
+      );
+    } catch (error) {
+      showToast(
+        'Invalid format. Please generate data from Raw mode first.',
+        'error'
+      );
+    }
+  };
+
   return (
     <div className="space-y-4 h-full">
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          className={`rounded-lg p-3 text-sm font-semibold font-['Urbanist'] animate-pulse ${
+            toast.type === 'success'
+              ? 'bg-green-100 text-green-800 border border-green-300'
+              : 'bg-red-100 text-red-800 border border-red-300'
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
+
       <div className="tile-honeydew rounded-2xl p-6 h-full flex flex-col">
         <div className="flex items-center justify-between mb-4">
           <label className="text-black text-sm font-semibold uppercase tracking-wider font-['Urbanist']">
             Frequency Distribution Table
           </label>
-          <button
-            onClick={handleAddRow}
-            className="px-3 py-1 rounded-lg btn-active text-sm font-medium hover:bg-[#E8E998] transition-all font-['Urbanist']"
-          >
-            Add Row
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handlePasteFromClipboard}
+              className="px-3 py-1 rounded-lg bg-black/20 text-black text-sm font-medium hover:bg-black/30 transition-all font-['Urbanist']"
+              title="Paste data formatted as: From,To,Freq|From,To,Freq"
+            >
+              Paste Data
+            </button>
+            <button
+              onClick={handleAddRow}
+              className="px-3 py-1 rounded-lg btn-active text-sm font-medium hover:bg-[#E8E998] transition-all font-['Urbanist']"
+            >
+              Add Row
+            </button>
+          </div>
         </div>
 
         <div className="space-y-3 max-h-96 overflow-y-auto flex-1">
@@ -108,7 +203,7 @@ export default function FDTEditor({
 
           {intervals.length === 0 && (
             <p className="text-black/60 text-sm text-center py-4 font-['Urbanist']">
-              No intervals yet. Click Add Row to start.
+              No intervals yet. Click Add Row or Paste Data to start.
             </p>
           )}
         </div>
